@@ -65,11 +65,6 @@ void loop(){
   reading_t reading;
 //  fillReadingWithGPS(&reading);
   fillReadingWithMagAcc(&reading);
-//  Serial.print(reading.hour);
-//  Serial.print(':');
-//  Serial.print(reading.minute);
-//  Serial.print(':');
-//  Serial.println(reading.seconds);
   printReading(&reading);
 
 }
