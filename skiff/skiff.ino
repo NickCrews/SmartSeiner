@@ -66,8 +66,26 @@ void loop(){
 //  fillReadingWithGPS(&reading);
   fillReadingWithMagAcc(&reading);
   printReading(&reading);
-
+  float x = reading.acceleration.x;
+  float y = reading.acceleration.y;
+  float z = reading.acceleration.z;
+  Serial.println(pitch(x,y,z));
+  Serial.println(roll(x,y,z));
 }
+
+float pitch(float accX, float accY, float accZ){
+  return atan2(-accX, sqrt(accY*accY + accZ*accZ)) * 180/M_PI;
+}
+
+float roll(float accX, float accY, float accZ){ 
+//  miu correction from https://stackoverflow.com/a/30195572/5156887
+  int sign  = accZ>0 ? 1 : -1 ;
+  float miu = 0.001;
+  float roll_rad  = atan2( accY,   sign* sqrt(accZ*accZ+ miu*accX*accX));
+  return roll_rad * 180/M_PI;
+}
+
+
 
 
 void formatReading(String* result, reading_t *reading){
@@ -126,8 +144,6 @@ void formatReading(String* result, reading_t *reading){
   }
   *result += "}";
 }
-
-
 void printReading(reading_t *reading){
   String resultString;
   formatReading(&resultString, reading);

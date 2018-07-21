@@ -7,9 +7,9 @@
 //#include <RFM69_OTA.h>
 
 // Node and network config
-#define NODE_ID        1    // The ID of this node (must be different for every node on network)
+#define THIS_NODE_ID   1    // The ID of this node (must be different for every node on network)
 #define NETWORK_ID     1  // The network ID
-#define GATEWAYID   1      //not sure, just copied fro example
+#define OTHER_NODE_ID  2      //not sure, just copied from example
 #define FREQUENCY     RF69_915MHZ // RF69_433MHZ //RF69_868MHZ // RF69_915MHZ
 #define ENCRYPT_KEY         "abcdefghijklmnop" //has to be same 16 characters/bytes on all nodes!
 
@@ -47,7 +47,7 @@ RFM69 radio(RF69_SPI_CS, RF69_IRQ_PIN, false, RF69_IRQ_NUM);
 bool radioReady = false;
 
 bool initRadio(){
-  bool success = radio.initialize(FREQUENCY,NODE_ID,NETWORK_ID);
+  bool success = radio.initialize(FREQUENCY,THIS_NODE_ID,NETWORK_ID);
   if (!success){
     return false;
   }
@@ -69,7 +69,7 @@ bool initRadio(){
 
 bool send(char* msg){
   int numRetries = 5;
-  return radio.sendWithRetry(GATEWAYID, msg, strlen(msg), numRetries);
+  return radio.sendWithRetry(OTHER_NODE_ID, msg, strlen(msg), numRetries);
 }
 //
 //// Reset the Radio
