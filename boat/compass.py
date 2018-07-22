@@ -23,7 +23,9 @@ class BoatCompass(object):
 
     def get_raw_data(self):
         acc, mag =  self.lsm303.read()
-        return mag
+        # WATCH OUT FOR THIS ORDER, Z and Y are switched in the Adafruit lib!
+        magX, magZ, magY = mag
+        return magX, magY, magZ
 
     def correct(self, raw_data):
         return self.compass.correct(raw_data)
@@ -120,6 +122,7 @@ class Compass(object):
     def heading(self, data):
         data = np.array(data)
         if len(data.shape) == 1:
+            #TODO WTF the y and z order is revered??!!
             x,y,z = data
         else:
             x,y,z = data.T
