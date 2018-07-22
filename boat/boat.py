@@ -8,54 +8,74 @@ github.com/jkittley/RFM69
 '''
 
 import time
-from math import sin, cos, sqrt, atan2, radians
+import numpy as np
 
-from RFM69 import Radio, FREQ_915MHZ
-import Adafruit_LSM303
+from gps3 import gps3 #https://pypi.org/project/gps3/
+#hookup from Pi to Adafruit Ultimate GPS
+#5v        <---> Vin
+#GND       <---> GND
+#Pin8(TX)  <---> RX
+#Pin10(RX) <---> TX
 
-# which network, and which node upon that network, is this RPi
-NETWORK_ID = 42
-NODE_ID = 42
+import compass
 
-def distance(loc1, loc2):
-    '''return the distance between two lat/long pairs. Assumes earth is sphere.
-    https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude'''
-    lat1, lon1 = loc1
-    lat2, lon2 = loc2
-    lat1 = radians(lat1)
-    lon1 = radians(lon1)
-    lat2 = radians(lat2)
-    lon2 = radians(lon2)
-    dlon = lon2 - lon1
-    dlat = lat2 - lat1
+class Boat(object):
 
-    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
-    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    DEFAULT_CALIBRATION_FILE_PATH = "./calibrations/boat.txt"
 
-    # approximate radius of earth in m
-    R = 6373.0 * 1000
-    return R * c
+    def __init__(self, compass_file=None):
 
-def is_skiff_trailing(skiff_loc, boat_loc):
-    pass
+        #assumes gpsd daemon has already been started
+        self.gps_socket = gps3.GPSDSocket()
+        self.data_stream = gps3.DataStream()
+        self.gps_socket.connect()
+        self.gps_socket.watch()
 
-def has_set_started(skiff_locs, boat_locs):
-    pass
+        self.compass = compass.BoatCompass(compass_file)
 
-def has_closed_up(skiff_locs, boat_locs):
-    pass
+    def get_heading(self):
+        # Read the X, Y, Z axis acceleration values and print them.
+        accel, mag = self.lsm303.read()
+        # Grab the X, Y, Z components from the reading and print them out.
+        accel_x, accel_y, accel_z = accel
+        mag_x, mag_z, mag_y = mag
+        return self.compass.get_heading(mag)
 
-def main():
-    with Radio(FREQ_915MHZ, nodeID=NODE_ID, networkID=NETWORK_ID, verbose=True) as radio:
-        while True:
-            print()
-            for packet in radio.get_packets():
-                print(packet)
-            time.sleep(3)
+    def get_location(self):
+        self._update()
+        coords = self.data_stream.TPV['lat'], self.data_stream.TPV['lon']
+        return coords
+
+    def get_COG(self):
+        self._update()
+        return self.data_Stream.TPV['heading']
+
+    def get_time(self):
+        self._update()
+        return self.data_stream.TPV['time']
+
+    def _update(self):
+        for new_data in self.gps_socket:
+            if new_data:
+                self.data_stream.unpack(new_data)
+            return
 
 if __name__ == '__main__':
-    print("BEGINNING MAIN")
-    main()
+##    import time
+##    print("Beginning boat test")
+    boat = Boat()
+##    while True:
+##        print(boat.get_location())
+##        print(boat.get_time())
+##        print(boat.get_heading())
+##        time.sleep(1)
+    print("rotate boat compass in all directions for 15 seconds...")
+    boat.calibrate_compass()
+
+
+
+
+
 
 
 
