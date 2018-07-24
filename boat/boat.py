@@ -32,32 +32,49 @@ class Boat(object):
         self.gps_socket.watch()
 
         self.compass = compass.BoatCompass(compass_file)
+        self.has_new_data = False
 
     def get_heading(self):
-        # Read the X, Y, Z axis acceleration values and print them.
-        accel, mag = self.lsm303.read()
-        # Grab the X, Y, Z components from the reading and print them out.
-        accel_x, accel_y, accel_z = accel
-        mag_x, mag_z, mag_y = mag
-        return self.compass.get_heading(mag)
+        return self.compass.get_heading()
 
     def get_location(self):
         self._update()
-        coords = self.data_stream.TPV['lat'], self.data_stream.TPV['lon']
+        coords = self.data['lat'], self.data['lon']
         return coords
 
     def get_COG(self):
         self._update()
-        return self.data_Stream.TPV['heading']
+        return self.data['heading']
 
     def get_time(self):
         self._update()
-        return self.data_stream.TPV['time']
+        return self.data['time']
+
+    def get_data(self):
+        '''Try to read new data from GPS, and then pull out some useful info
+
+        All of the available attributes are at http://www.catb.org/gpsd/gpsd_json.html
+        '''
+        self._update()
+        data = {}
+        data['lat']        = self.data['lat']
+        data['lon']        = self.data['lon']
+        data['datetime']   = self.data['time'] #Time/date stamp in ISO8601 format, UTC.
+        data['COG']        = self.data['track']
+        data['heading']    = self.compass.get_heading()
+        self.has_new_data = False
+        return data
 
     def _update(self):
         for new_data in self.gps_socket:
             if new_data:
                 self.data_stream.unpack(new_data)
+                self.data = {}
+                for (key, value) in self.data_stream.TPV.items():
+                    if value == 'n/a':
+                        value = np.nan
+                    self.data[key] = value
+                self.has_new_data = True
             return
 
 if __name__ == '__main__':
