@@ -39,6 +39,7 @@ class BoatCompass(object):
 
     def get_heading(self):
         raw = self.get_raw_data()
+        # print(self)
         corrected = self.correct(raw)
         # mag_x, mag_z, mag_y = mag
         return self.compass.heading(corrected)
@@ -73,27 +74,17 @@ class Compass(object):
     def __init__(self, declination=0, calibration_params=None):
         self.declination = declination
         if calibration_params is None:
-            center = 0,0,0
-            evecs  = 0,0,0
-            radii  = 1,1,1
-            v = None
-            calibration_params = center, evecs, radii, v
+            # don't perform a transformation
+            center = np.array([[0,0,0]]).T
+            radii  = np.array([1,1,1])
+            evecs  = np.array([[1,0,0],
+                               [0,1,0],
+                               [0,0,1]])
+            v = np.array([[1,1,1],
+                          [0,0,0],
+                          [0,0,0]])
+            calibration_params = center, radii, evecs, v
         self.params = calibration_params
-
-    @staticmethod
-    def _default_params():
-        '''Generate the default params that don't affect readings'''
-        readings = []
-        for i in range(10000):
-            x = np.random.random()*2-1
-            y = np.random.random()*2-1
-            z = 1 - np.sqrt(x*x + y*y)
-            if np.random.random() > .5:
-                z = -z
-            readings.append([x,y,z])
-        readings = np.array(readings)
-        regularized = data_regularize(readings, divs=8)
-        return ellipsoid_fit(regularized)
 
     def calibrate(self, raw_mag):
         #not sure what regularizing does but the ellipsoid_fit example uses it...
@@ -114,7 +105,7 @@ class Compass(object):
         TR = evecs.dot(D).dot(evecs.T)
         transformed = TR.dot(centered.T).T
         # if its just one row of data then keep it 1D
-        if transformed.shape[0] == 1:
+        if len(raw_mag.shape) == 1:
             return transformed[0]
         else:
             return transformed
@@ -152,6 +143,16 @@ class Compass(object):
         center, radii, evecs, v = self.params
         args = self.declination, center, radii, evecs, v
         return "Compass (declination={}, center={}, radii={}, evecs={}, v={})".format(*args)
+
+def _monte_carlo_identity():
+    '''Generate the default params that don't affect readings by fitting to a unit sphere'''
+    # create points randomly distributed on the unit sphere
+    npoints = 25000
+    vec = np.random.randn(3, npoints)
+    vec /= np.linalg.norm(vec, axis=0)
+    # use those to fit
+    regularized = data_regularize(vec.T, divs=8)
+    return ellipsoid_fit(regularized)
 
 def load_compass(filename):
     import json
