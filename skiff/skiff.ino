@@ -36,19 +36,19 @@ void setup(){
   Serial.begin(SERIAL_BAUD);
   Serial.println("starting...");
   
-  if (initMagAccSensor()){
-    Serial.println("Successfully loaded magnetometer/accelerometer.");
-  }
-  else{
-    Serial.println("Failed to initialize magnetometer/accelerometer. Check wiring?");
-  }
+//  if (initMagAccSensor()){
+//    Serial.println("Successfully loaded magnetometer/accelerometer.");
+//  }
+//  else{
+//    Serial.println("Failed to initialize magnetometer/accelerometer. Check wiring?");
+//  }
 
-  if (initGPS()){
-    Serial.println("Successfully loaded GPS.");
-  }
-  else{
-    Serial.println("Failed to initialize GPS. Check wiring?");
-  }
+//  if (initGPS()){
+//    Serial.println("Successfully loaded GPS.");
+//  }
+//  else{
+//    Serial.println("Failed to initialize GPS. Check wiring?");
+//  }
 
   if (initRadio()){
     Serial.println("Successfully loaded radio.");
@@ -59,18 +59,20 @@ void setup(){
 }
 
 void loop(){
-  delay(100);
+  delay(1000);
 //  if (!newGPSreading()) return;
   
   reading_t reading;
 //  fillReadingWithGPS(&reading);
-  fillReadingWithMagAcc(&reading);
+//  fillReadingWithMagAcc(&reading);
   printReading(&reading);
-  float x = reading.acceleration.x;
-  float y = reading.acceleration.y;
-  float z = reading.acceleration.z;
-  Serial.println(pitch(x,y,z));
-  Serial.println(roll(x,y,z));
+//  float x = reading.acceleration.x;
+//  float y = reading.acceleration.y;
+//  float z = reading.acceleration.z;
+//  Serial.println(pitch(x,y,z));
+//  Serial.println(roll(x,y,z));
+  Serial.println(radioSend("beep"));
+  echoRadio();
 }
 
 float pitch(float accX, float accY, float accZ){

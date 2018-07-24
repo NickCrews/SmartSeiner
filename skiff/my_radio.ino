@@ -7,9 +7,9 @@
 //#include <RFM69_OTA.h>
 
 // Node and network config
-#define THIS_NODE_ID   1    // The ID of this node (must be different for every node on network)
 #define NETWORK_ID     1  // The network ID
-#define OTHER_NODE_ID  2      //not sure, just copied from example
+#define THIS_NODE_ID   2    // The ID of this node (must be different for every node on network)
+#define OTHER_NODE_ID  1    
 #define FREQUENCY     RF69_915MHZ // RF69_433MHZ //RF69_868MHZ // RF69_915MHZ
 #define ENCRYPT_KEY         "abcdefghijklmnop" //has to be same 16 characters/bytes on all nodes!
 
@@ -67,8 +67,39 @@ bool initRadio(){
   return true;
 }
 
-bool send(char* msg){
-  int numRetries = 5;
+void echoRadio(){
+  if (radio.receiveDone()) // Got one!
+  {
+    // Print out the information:
+    
+    Serial.print("received from node ");
+    Serial.print(radio.SENDERID, DEC);
+    Serial.print(": [");
+
+    // The actual message is contained in the DATA array,
+    // and is DATALEN bytes in size:
+    
+    for (byte i = 0; i < radio.DATALEN; i++)
+      Serial.print((char)radio.DATA[i]);
+
+    // RSSI is the "Receive Signal Strength Indicator",
+    // smaller numbers mean higher power.
+    
+    Serial.print("], RSSI ");
+    Serial.println(radio.RSSI);
+
+    // Send an ACK if requested.
+    // (You don't need this code if you're not using ACKs.)
+    
+    if (radio.ACKRequested())
+    {
+      radio.sendACK();
+      Serial.println("ACK sent");
+    }
+  }
+}
+bool radioSend(char* msg){
+  int numRetries = 1;
   return radio.sendWithRetry(OTHER_NODE_ID, msg, strlen(msg), numRetries);
 }
 //
