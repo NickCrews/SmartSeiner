@@ -34,6 +34,8 @@ class DataLogger(object):
         date_and_time = boat_data['datetime']
         if date_and_time is not np.nan:
             dt = datetime.datetime.strptime(date_and_time, "%Y-%m-%dT%H:%M:%S.%fZ")
+            # convert to alaska time
+            dt = dt - datetime.timedelta(hours=8)
         else:
             dt = np.nan
         merged['datetime']      = dt
