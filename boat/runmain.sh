@@ -9,3 +9,5 @@ sudo systemctl stop serial-getty@ttyS0.service
 sudo systemctl disable serial-getty@ttyS0.service
 sudo killall gpsd
 sudo gpsd /dev/ttyS0 -F /var/run/gpsd.sock
+
+python3 main.py
