@@ -43,10 +43,12 @@ class DataLogger(object):
         merged['skiff_lon']     = skiff_data['lon']
         merged['skiff_heading'] = skiff_data['heading']
         merged['skiff_COG']     = skiff_data['COG']
+        merged['skiff_speed']   = skiff_data['speed']
         merged['boat_lat']      = boat_data['lat']
         merged['boat_lon']      = boat_data['lon']
         merged['boat_heading']  = boat_data['heading']
         merged['boat_COG']      = boat_data['COG']
+        merged['boat_speed']    = boat_data['speed']
         return merged
 
     def write_line(self, data):
@@ -65,6 +67,9 @@ class DataLogger(object):
                 line = '\t'.join(column_names)
                 fp.write(line)
                 fp.write('\n')
+        # verify file has correct column headers...
+        with open(filename, 'r') as fp:
+            assert column_names == fp.readline().split('\t')
         with open(filename, 'a') as fp:
             entries = [str(data[col]) for col in column_names]
             line = '\t'.join(entries)
