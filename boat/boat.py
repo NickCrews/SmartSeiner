@@ -61,6 +61,7 @@ class Boat(object):
         data['lon']        = self.data['lon']
         data['datetime']   = self.data['time'] #Time/date stamp in ISO8601 format, UTC.
         data['COG']        = self.data['track']
+        data['speed']      = self.data['speed']
         data['heading']    = self.compass.get_heading()
         self.has_new_data = False
         return data
