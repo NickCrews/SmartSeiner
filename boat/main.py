@@ -24,8 +24,10 @@ class DataLogger(object):
             boat_data  = self.boat.get_data()
             skiff_data = self.skiff.get_data()
             merged_data = self.merge_data(boat_data, skiff_data)
+            print(merged_data)
             if merged_data['datetime'] is not np.nan:
                 # print("writing data: {}",format(merged_data))
+                print('writing data...')
                 self.write_line(merged_data)
             time.sleep(5)
 
@@ -49,6 +51,8 @@ class DataLogger(object):
         merged['boat_heading']  = boat_data['heading']
         merged['boat_COG']      = boat_data['COG']
         merged['boat_speed']    = boat_data['speed']
+        merged['pressure']      = boat_data['pressure']
+        merged['temp']          = boat_data['temp']
         return merged
 
     def write_line(self, data):
