@@ -69,7 +69,9 @@ class DataLogger(object):
                 fp.write('\n')
         # verify file has correct column headers...
         with open(filename, 'r') as fp:
-            assert column_names == fp.readline().split('\t')
+            #get the first line, strip the ending newline, and split on tabs
+            file_columns = fp.readline().strip().split('\t')
+            assert column_names == file_columns
         with open(filename, 'a') as fp:
             entries = [str(data[col]) for col in column_names]
             line = '\t'.join(entries)
