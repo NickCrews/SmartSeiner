@@ -31,14 +31,22 @@ class BoatCompass(object):
         return self.compass.correct(raw_data)
 
     def get_corrected(self):
-        raw = self.get_raw_data()
+        try:
+            raw = self.get_raw_data()
+        except OSError:
+            # got an I2C error, just give a nan
+            return np.nan
         return self.correct(raw)
 
     def calc_heading(self, corrected):
         return self.compass.heading(corrected)
 
     def get_heading(self):
-        raw = self.get_raw_data()
+        try:
+            raw = self.get_raw_data()
+        except OSError:
+            # got an I2C error, just give a nan
+            return np.nan
         # print(self)
         corrected = self.correct(raw)
         # mag_x, mag_z, mag_y = mag
