@@ -25,24 +25,29 @@ class PressureGauge(ms5803py.Sensor):
     However, just retrying all communications a few times seems to work.'''
 
     def __init__(self, *args, **kwargs):
-        RETRIES = 5
+        RETRIES = 15
         for _ in range(RETRIES):
             try:
                 return super().__init__(*args, **kwargs)
             except OSError:
                 # print('retrying to init ms5803...')
                 pass #we just gotta try again
-        raise Exception("Could not initiate ms5803")
+            time.sleep(.1)
+        raise OSError("Could not initiate ms5803")
 
     def read(self):
-        RETRIES = 5
+        RETRIES = 25
         for _ in range(RETRIES):
             try:
-                return super().read()
+                pressure, temp = super().read()
+                if pressure > 50 and pressure < 10000:
+                    # sometimes theres a bogus pressure reading of like -800?
+                    return pressure, temp
             except OSError:
                 # print('re-reading from ms5803...')
+                time.sleep(.1)
                 pass #we just gotta try again
-        raise Exception("Lost connection to ms5803")
+        raise OSError("Lost connection to ms5803")
 
 class Boat(object):
 
@@ -89,7 +94,11 @@ class Boat(object):
         data['COG']        = self.data['track']
         data['speed']      = self.data['speed']
         data['heading']    = self.compass.get_heading()
-        pressure, temp     = self.pressure_gauge.read()
+        try:
+            pressure, temp = self.pressure_gauge.read()
+        except OSError:
+            # sometimes we just lose a connection, forget it for now
+            pressure, temp = np.nan, np.nan
         data['pressure']   = pressure
         data['temp']       = temp
         self.has_new_data = False
