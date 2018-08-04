@@ -10,4 +10,4 @@ sudo systemctl disable serial-getty@ttyS0.service
 sudo killall gpsd
 sudo gpsd /dev/ttyS0 -F /var/run/gpsd.sock
 
-python3 main.py
+python3 ~/Documnets/SmartSeiner/boat/main.py
