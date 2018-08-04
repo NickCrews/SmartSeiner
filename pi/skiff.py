@@ -24,33 +24,34 @@ class Skiff(object):
 
     def get_data(self):
         all_readings = self.radio.get_data()
-        print("allreading:", all_readings)
+        # print("allreading:", all_readings)
         if len(all_readings) < 1:
             return dict(lat=np.nan,
                         lon=np.nan,
-                        heading=np.nan,
                         COG=np.nan,
                         speed=np.nan
                         )
         most_recent_bytes = all_readings[-1]
-        dictionary = self.parse_bytes(byte_list)
+        dictionary = self.parse_bytes(most_recent_bytes)
         self.has_new_data = False
         return dictionary
 
     def parse_bytes(self, byte_list):
-        assert len(byte_list) == 8
-        lat = self.bytes2float(byte_list[0:4])
-        lat = self.bytes2float(byte_list[4:8])
+        assert len(byte_list) == 16
+        lat   = self.bytes2float(byte_list[0:4])
+        lon   = self.bytes2float(byte_list[4:8])
+        COG   = self.bytes2float(byte_list[8:12])
+        speed = self.bytes2float(byte_list[12:16])
         return dict(lat=lat,
                     lon=lon,
-                    heading=np.nan,
-                    COG=np.nan,
-                    speed=np.nan)
+                    COG=COG,
+                    speed=speed)
 
     def bytes2float(self, byte_list):
         assert len(byte_list) == 4
         byte_array = bytearray(byte_list)
-        return unpack('<f', byte_arr)[0]
+        python_float = unpack('<f', byte_array)[0]
+        return python_float
 
 class MyRadio(object):
 
@@ -65,7 +66,7 @@ class MyRadio(object):
     def get_data(self):
         readings = []
         while not self.q.empty():
-            readings.append(byteself.q.get())
+            readings.append(self.q.get())
         return readings
 
 class RadioPoller(Thread):
@@ -95,14 +96,14 @@ class RadioPoller(Thread):
             # values with this used and without it. There should be a 2-4 dB
             # benefit from using the pre-amp
             # lowpowerlab.com/forum/rf-range-antennas-rfm69-library/rfm69hw-range-test!
-
-            # radio._writeReg(0x58, 0x2D)
+            radio._writeReg(0x58, 0x2D)
 
             while True:
                 # print("RadioPoller is polling...")
                 for packet in radio.get_packets():
                     # entry = (int(packet.RSSI), packet.received
-                    print("RadioPoller received some data!")
+                    # print("RadioPoller received some data!")
+                    print("got a radio packet with rssi={}".format(packet.RSSI))
                     self.q.put(packet.data[:])
                     # print (packet.RSSI, bytes2floats(packet.data))
 

@@ -12,10 +12,8 @@ import compass
 
 import datalogger
 
-
-
 def main():
-    dl = datalogger.DataLogger()
+    dl = datalogger.DataLogger(sample_interval=1, log_interval=10)
     dl.begin()
 
 def calibrate_boat():
