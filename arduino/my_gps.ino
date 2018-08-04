@@ -64,13 +64,19 @@ bool fillReadingWithGPS(reading_t *reading){
   reading->seconds = GPS.seconds;
 
   if (GPS.fix){
-    reading->hasFix = true;
-    reading->latitude =  GPS.latitudeDegrees;
+    reading->hasFix    = true;
+    reading->latitude  = GPS.latitudeDegrees;
     reading->longitude = GPS.longitudeDegrees;
+    reading->COG       = GPS.angle;
+    reading->speed     = GPS.speed;
   }
   else{
-    reading->hasFix = false;
-    reading->latitude = reading->longitude = 999;
+    reading->hasFix    = false;
+//    set to NaN
+    reading->latitude  = sqrt(-1);
+    reading->longitude = sqrt(-1);
+    reading->COG       = sqrt(-1);
+    reading->speed     = sqrt(-1);
   }
   return true;
 }
