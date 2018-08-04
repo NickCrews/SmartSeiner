@@ -7,29 +7,43 @@ class PressureGauge(ms5803py.Sensor):
     However, just retrying all communications a few times seems to work.'''
 
     def __init__(self, *args, **kwargs):
-        RETRIES = 5
+        RETRIES = 15
         for _ in range(RETRIES):
             try:
                 return super().__init__(*args, **kwargs)
             except OSError:
                 # print('retrying to init ms5803...')
                 pass #we just gotta try again
+            time.sleep(.1)
         raise Exception("Could not initiate ms5803")
 
     def read(self):
-        RETRIES = 5
+        RETRIES = 25
         for _ in range(RETRIES):
             try:
-                return super().read()
+                pressure, temp = super().read()
+                if pressure > 50 and pressure < 10000:
+                    # sometimes theres a bogus pressure reading of like -800?
+                    return pressure, temp            
             except OSError:
                 # print('re-reading from ms5803...')
+                time.sleep(.1)
                 pass #we just gotta try again
         raise Exception("Lost connection to ms5803")
 
 if __name__ == '__main__':
     pg = PressureGauge()
-    print("time\tpress\ttemp")
-    while True:
-        press, temp = pg.read()
-        print("{}\t{}\t{}".format(time.time(), press, temp))
-        time.sleep(.2)
+    fname = "./calibrations/pressure_{}.csv".format(time.ctime().replace(':','-').replace(' ', '_'))
+    with open(fname, 'w') as fp:
+        buf = "time\tpress\ttemp"
+        print(buf)
+        fp.write(buf + '\n')
+        while True:
+            try:
+                press, temp = pg.read()
+            except OSError:
+                continue
+            buf = "{}\t{}\t{}".format(time.time(), press, temp)
+            print(buf)
+            fp.write(buf+'\n')
+            time.sleep(5)
