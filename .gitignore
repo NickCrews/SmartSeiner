@@ -3,10 +3,10 @@
 *.bak
 
 # ignore all the logged data except for an example
-boat/data/*
-!boat/data/2018-07-24.csv
-boat/calibrations/pressure_*
-!boat/calibrations/pressure_Mon_Jul_30_13-19-35_2018.csv
+pi/data/*
+!pi/data/2018-07-24.csv
+pi/calibrations/pressure_*
+!pi/calibrations/pressure_Mon_Jul_30_13-19-35_2018.csv
 
 
 # Byte-compiled / optimized / DLL files
