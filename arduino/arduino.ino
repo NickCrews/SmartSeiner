@@ -17,7 +17,7 @@ github.com/LowPowerLab/SPIFlash
 
 #define SERIAL_BAUD   115200
 
-#define NUM_BYTES_SENT 8
+#define NUM_BYTES_SENT 16
 
 typedef struct {
   float         x;
@@ -29,8 +29,10 @@ typedef struct {
   bool hasGPS, hasMagAcc;
   uint8_t hour, minute, seconds, year, month, day;
   bool hasFix;
-  float         latitude;
-  float         longitude;
+  float latitude;
+  float longitude;
+  float COG;
+  float speed;
   vec3_t acceleration, magnetic;
 } reading_t;
 
@@ -93,14 +95,27 @@ float roll(float accX, float accY, float accZ){
   return roll_rad * 180/M_PI;
 }
 
-void reading2bytes(byte result[8], reading_t* reading){
+void reading2bytes(byte result[NUM_BYTES_SENT], reading_t* reading){
   byte pos = 0;
   byte* b = (byte *) &(reading->latitude);
   for (int i=0; i<4; i++){
     result[pos+i] = b[i];
   }
+  
   pos = pos + 4;
   b = (byte *) &(reading->longitude);;
+  for (int i=0; i<4; i++){
+    result[pos+i] = b[i];
+  }
+  
+  pos = pos + 4;
+  b = (byte *) &(reading->COG);;
+  for (int i=0; i<4; i++){
+    result[pos+i] = b[i];
+  }
+
+  pos = pos + 4;
+  b = (byte *) &(reading->speed);;
   for (int i=0; i<4; i++){
     result[pos+i] = b[i];
   }
