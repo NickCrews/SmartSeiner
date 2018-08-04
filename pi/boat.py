@@ -61,7 +61,12 @@ class Boat(object):
         self.gps_socket.connect()
         self.gps_socket.watch()
 
-        self.compass = compass.BoatCompass(compass_file)
+        try:
+            self.compass = compass.BoatCompass(compass_file)
+        except OSError:
+            # couldnt talk to LSM303
+            print("couldnt initiate compass")
+            self.compass = None
         self.pressure_gauge = PressureGauge()
         self.has_new_data = False
 
@@ -93,7 +98,10 @@ class Boat(object):
         data['datetime']   = self.data['time'] #Time/date stamp in ISO8601 format, UTC.
         data['COG']        = self.data['track']
         data['speed']      = self.data['speed']
-        data['heading']    = self.compass.get_heading()
+        if self.compass:
+            data['heading']    = self.get_heading()
+        else:
+            data['heading']    = np.nan
         try:
             pressure, temp = self.pressure_gauge.read()
         except OSError:
