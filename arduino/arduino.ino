@@ -17,6 +17,8 @@ github.com/LowPowerLab/SPIFlash
 
 #define SERIAL_BAUD   115200
 
+#define NUM_BYTES_SENT 8
+
 typedef struct {
   float         x;
   float         y;
@@ -35,20 +37,20 @@ typedef struct {
 void setup(){
   Serial.begin(SERIAL_BAUD);
   Serial.println("starting...");
-  
-//  if (initMagAccSensor()){
-//    Serial.println("Successfully loaded magnetometer/accelerometer.");
-//  }
-//  else{
-//    Serial.println("Failed to initialize magnetometer/accelerometer. Check wiring?");
-//  }
 
-//  if (initGPS()){
-//    Serial.println("Successfully loaded GPS.");
-//  }
-//  else{
-//    Serial.println("Failed to initialize GPS. Check wiring?");
-//  }
+  if (initMagAccSensor()){
+    Serial.println("Successfully loaded magnetometer/accelerometer.");
+  }
+  else{
+    Serial.println("Failed to initialize magnetometer/accelerometer. Check wiring?");
+  }
+
+  if (initGPS()){
+    Serial.println("Successfully loaded GPS.");
+  }
+  else{
+    Serial.println("Failed to initialize GPS. Check wiring?");
+  }
 
   if (initRadio()){
     Serial.println("Successfully loaded radio.");
@@ -59,27 +61,31 @@ void setup(){
 }
 
 void loop(){
-  delay(1000);
+  delay(10);
 //  if (!newGPSreading()) return;
-  
+
   reading_t reading;
-//  fillReadingWithGPS(&reading);
+  fillReadingWithGPS(&reading);
 //  fillReadingWithMagAcc(&reading);
-  printReading(&reading);
+//  printReading(&reading);
 //  float x = reading.acceleration.x;
 //  float y = reading.acceleration.y;
 //  float z = reading.acceleration.z;
 //  Serial.println(pitch(x,y,z));
 //  Serial.println(roll(x,y,z));
-  Serial.println(radioSend("beep"));
-  echoRadio();
+  byte buf[NUM_BYTES_SENT];
+  Serial.println("packing!");
+  reading2bytes(buf, &reading);
+  Serial.println("sending!");
+  radioSend(buf, NUM_BYTES_SENT);
+//  echoRadio();
 }
 
 float pitch(float accX, float accY, float accZ){
   return atan2(-accX, sqrt(accY*accY + accZ*accZ)) * 180/M_PI;
 }
 
-float roll(float accX, float accY, float accZ){ 
+float roll(float accX, float accY, float accZ){
 //  miu correction from https://stackoverflow.com/a/30195572/5156887
   int sign  = accZ>0 ? 1 : -1 ;
   float miu = 0.001;
@@ -87,10 +93,20 @@ float roll(float accX, float accY, float accZ){
   return roll_rad * 180/M_PI;
 }
 
+void reading2bytes(byte result[8], reading_t* reading){
+  byte pos = 0;
+  byte* b = (byte *) &(reading->latitude);
+  for (int i=0; i<4; i++){
+    result[pos+i] = b[i];
+  }
+  pos = pos + 4;
+  b = (byte *) &(reading->longitude);;
+  for (int i=0; i<4; i++){
+    result[pos+i] = b[i];
+  }
+}
 
-
-
-void formatReading(String* result, reading_t *reading){
+void formatReading(String* result, reading_t* reading){
   *result = "{";
 
   *result += "\"hasGPS\":";
@@ -104,7 +120,7 @@ void formatReading(String* result, reading_t *reading){
     *result += String(reading->day);
     *result += "/";
     *result += String(reading->year);
-  
+
     *result += "\", \"time\":\"";
     *result += String(reading->hour);
     *result += ":";
@@ -135,7 +151,7 @@ void formatReading(String* result, reading_t *reading){
     *result += ", ";
     *result += String(reading->acceleration.z, 4);
     *result += "]";
-    
+
     *result += ", \"mag\":[";
     *result += String(reading->magnetic.x, 4);
     *result += ", ";
@@ -152,7 +168,7 @@ void printReading(reading_t *reading){
   Serial.println(resultString);
 }
 
-void Blink(byte PIN, byte DELAY_MS)
+void Blink(char PIN, char DELAY_MS)
 {
   pinMode(PIN, OUTPUT);
   digitalWrite(PIN,HIGH);
