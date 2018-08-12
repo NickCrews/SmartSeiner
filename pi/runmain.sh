@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # start gpsd so that python can access the adafruit GPS breakout over UART.
 # There are some additional steps you must follow once, such as downloading gpsd
@@ -10,4 +10,5 @@ sudo systemctl disable serial-getty@ttyS0.service
 sudo killall gpsd
 sudo gpsd /dev/ttyS0 -F /var/run/gpsd.sock
 
-python3 ~/Documents/SmartSeiner/pi/main.py
+python3 /home/pi/Documents/SmartSeiner/pi/main.py
+
