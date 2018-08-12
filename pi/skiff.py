@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import numpy as np
 import time
 from struct import unpack
@@ -79,6 +82,10 @@ class RadioPoller(Thread):
         self.sleep_time = sleep_time
 
     def run(self):
+        # just to make the library shutup about using pins already in use...
+        import RPi.GPIO as GPIO
+        GPIO.setwarnings(False)
+        
         with Radio(FREQ_915MHZ,
                    THIS_NODE_ID,
                    NETWORK_ID,
@@ -103,7 +110,7 @@ class RadioPoller(Thread):
                 for packet in radio.get_packets():
                     # entry = (int(packet.RSSI), packet.received
                     # print("RadioPoller received some data!")
-                    print("got a radio packet with rssi={}".format(packet.RSSI))
+                    logger.debug("got a radio packet with rssi={}".format(packet.RSSI))
                     self.q.put(packet.data[:])
                     # print (packet.RSSI, bytes2floats(packet.data))
 
