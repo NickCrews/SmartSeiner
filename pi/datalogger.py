@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import time
 import datetime
 import os
@@ -21,7 +24,10 @@ class DataLogger(object):
 
     def make_log_file(self, data):
         day_string = str(data['datetime']).split(" ")[0]
-        self.filename = 'data/' + day_string + '.csv'
+        filename = '/home/pi/Documents/SmartSeiner/pi/data/' + day_string + '.csv'
+        if filename == self.filename:
+            return
+        self.filename = filename
 
         # make the directory and init the file if necessary
         dir = os.path.dirname(self.filename)
@@ -29,12 +35,13 @@ class DataLogger(object):
             os.makedirs(dir, exist_ok=True)
         column_names = list(sorted(data.keys()))
         header = '\t'.join(column_names) + '\n'
-        print(header, end='')
         if not os.path.exists(self.filename):
             with open(self.filename, 'w') as fp:
                 fp.write(header)
 
     def begin(self):
+        logger.info("="*80)
+        logger.info("BEGAN LOGGING!!")
         last_sample = time.time()
         last_log  = time.time()
         samples = []
@@ -58,6 +65,9 @@ class DataLogger(object):
     def merge_samples(self, samples):
         # print('raw samples:')
         # print(samples)
+
+        #TODO this simple meaning doesn't work well with COG since there is often
+        # lots of variation so every sample is ignored
 
         def mean_column(column_name):
             # print('series:', column_name)
@@ -138,8 +148,7 @@ class DataLogger(object):
     def write_line(self, data):
         if data['datetime'] is np.nan:
             raise Exception("Can only save data with a valid timestamp")
-        if not self.filename:
-            self.make_log_file(data)
+        self.make_log_file(data)
 
         # verify file has correct column headers...
 
@@ -152,4 +161,4 @@ class DataLogger(object):
             entries = [str(data[col]) for col in column_names]
             line = '\t'.join(entries) + '\n'
             fp.write(line)
-            print(line, end='')
+            # print(line, end='')
