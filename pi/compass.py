@@ -46,7 +46,7 @@ class BoatCompass(object):
             raw = self.get_raw_data()
         except OSError:
             # got an I2C error, just give a nan
-            return np.nan
+            raise OSError("lost connection to compass!")
         # print(self)
         corrected = self.correct(raw)
         # mag_x, mag_z, mag_y = mag
