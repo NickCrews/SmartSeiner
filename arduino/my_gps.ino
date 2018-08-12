@@ -72,11 +72,10 @@ bool fillReadingWithGPS(reading_t *reading){
   }
   else{
     reading->hasFix    = false;
-//    set to NaN
-    reading->latitude  = sqrt(-1);
-    reading->longitude = sqrt(-1);
-    reading->COG       = sqrt(-1);
-    reading->speed     = sqrt(-1);
+    reading->latitude  = NaN;
+    reading->longitude = NaN;
+    reading->COG       = NaN;
+    reading->speed     = NaN;
   }
   return true;
 }
@@ -92,11 +91,12 @@ bool fillReadingWithGPS(reading_t *reading){
  * asking if it has a new char, and stores it if one's ready. 
  * Once a whole NMEA sentence is received then the GPS.newNMEAreceived() flag is set,
  * and we can actually parse the sentence in our main loop.
- * Basically all this fress us from calling GPS.read() in the main loop.
+ * Basically all this frees us from calling GPS.read() in the main loop.
  */
 
 SIGNAL(TIMER0_COMPA_vect) {
   char c = GPS.read();
+    
   // if you want to debug, this is a good time to do it!
 #ifdef UDR0
   if (GPSECHO)
