@@ -1,8 +1,17 @@
 #main.py
+import logging
+LOGFILE = "/home/pi/Documents/SmartSeiner/pi/logfile.txt"
+LOG_FMT = "%(asctime)s:%(levelname)s:%(name)s:%(message)s"
+logging.basicConfig(filename = LOGFILE,
+                    level = "INFO",
+                    format=LOG_FMT)
+logger = logging.getLogger(__name__)
+
 import time
 import datetime
 import os
 import numpy as np
+
 
 import Adafruit_LSM303
 
@@ -84,7 +93,7 @@ def calibrate_compass():
     # np.savetxt("corrected.txt", corrected)
 
 if __name__ == '__main__':
-    print("BEGINNING MAIN")
+    logger.info("BEGINNING MAIN")
     # print(compass.Compass._default_params())
     main()
     # fix_raw_readings()
