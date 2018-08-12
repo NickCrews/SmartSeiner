@@ -1,3 +1,9 @@
+'''
+Used to test the connection between the arduino and the RasPi.
+The RasPi will keep on reading from the RFM69 and print out any data it receives
+'''
+
+
 import time
 from RFM69 import Radio, FREQ_915MHZ
 
