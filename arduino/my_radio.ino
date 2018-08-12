@@ -26,6 +26,10 @@ bool initRadio(){
   radio.writeReg(0x03, 0x68);
   radio.writeReg(0x04, 0x2B);
 
+  //We don't need to receive anything so save some battery.
+  //It automatically goes out of sleep whenever we send. 
+  radio.sleep();
+
 //  //Auto Transmission Control - dials down transmit power to save battery (-100 is the noise floor, -90 is still pretty good)
 //  //For indoor nodes that are pretty static and at pretty stable temperatures (like a MotionMote) -90dBm is quite safe
 //  //For more variable nodes that can expect to move or experience larger temp drifts a lower margin like -70 to -80 would probably be better
@@ -35,39 +39,10 @@ bool initRadio(){
   return true;
 }
 
-// void echoRadio(){
-//   if (radio.receiveDone()) // Got one!
-//   {
-//     // Print out the information:
-//
-//     Serial.print("received from node ");
-//     Serial.print(radio.SENDERID, DEC);
-//     Serial.print(": [");
-//
-//     // The actual message is contained in the DATA array,
-//     // and is DATALEN bytes in size:
-//
-//     for (byte i = 0; i < radio.DATALEN; i++)
-//       Serial.print((char)radio.DATA[i]);
-//
-//     // RSSI is the "Receive Signal Strength Indicator",
-//     // smaller numbers mean higher power.
-//
-//     Serial.print("], RSSI ");
-//     Serial.println(radio.RSSI);
-//
-//     // Send an ACK if requested.
-//     // (You don't need this code if you're not using ACKs.)
-//
-//     if (radio.ACKRequested())
-//     {
-//       radio.sendACK();
-//       Serial.println("ACK sent");
-//     }
-//   }
-// }
-
 void radioSend(void* msg, uint8_t len){
   bool requestAck = false;
   radio.send(OTHER_NODE_ID, msg, len, requestAck);
+  //We don't need to receive anything so save some battery.
+  //It automatically goes out of sleep whenever we send. 
+  radio.sleep();
 }
