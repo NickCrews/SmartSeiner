@@ -7,6 +7,9 @@ dependencies:
 github.com/jkittley/RFM69
 '''
 
+import logging
+logger = logging.getLogger(__name__)
+
 import time
 import numpy as np
 
@@ -51,77 +54,111 @@ class PressureGauge(ms5803py.Sensor):
 
 class Boat(object):
 
-    DEFAULT_CALIBRATION_FILE_PATH = "./calibrations/boat.txt"
+    DEFAULT_CALIBRATION_FILE_PATH = "/home/pi/Documents/SmartSeiner/pi/calibrations/boat.txt"
 
     def __init__(self, compass_file=None):
+
+        self.compass_file = compass_file
 
         #assumes gpsd daemon has already been started
         self.gps_socket = gps3.GPSDSocket()
         self.data_stream = gps3.DataStream()
         self.gps_socket.connect()
         self.gps_socket.watch()
+        self.gps_data = dict(datetime=np.nan,
+                         lat=np.nan,
+                         lon=np.nan,
+                         COG=np.nan,
+                         speed=np.nan)
 
-        try:
-            self.compass = compass.BoatCompass(compass_file)
-        except OSError:
-            # couldnt talk to LSM303
-            print("couldnt initiate compass")
-            self.compass = None
-        self.pressure_gauge = PressureGauge()
-        self.has_new_data = False
+        self._init_pressure_gauge()
+        self._init_compass()
+
+    def _init_pressure_gauge(self):
+        if not hasattr(self, 'pressure_gauge') or self.pressure_gauge is None:
+            try:
+                self.pressure_gauge = PressureGauge()
+                logger.info("loaded pressure gauge")
+            except OSError:
+                # couldnt talk to LSM303
+                self.pressure_gauge = None
+
+    def _init_compass(self):
+        if not hasattr(self, 'compass') or self.compass is None:
+            try:
+                self.compass = compass.BoatCompass(self.compass_file)
+                logger.info("loaded compass")
+            except OSError:
+                # couldnt talk to LSM303
+                self.compass = None
 
     def get_heading(self):
-        return self.compass.get_heading()
+        self._init_compass()
+        if self.compass is None:
+            return np.nan
+        try:
+            return self.compass.get_heading()
+        except OSError:
+            # lost connection to compass
+            self.compass = None
+            logger.warning("lost connection to compass")
+            return np.nan
+
+    def get_pressure_and_temp(self):
+        '''Read the pressure and temp in the fish hold'''
+        self._init_pressure_gauge()
+        if self.pressure_gauge is None:
+            pressure, temp = np.nan, np.nan
+            return pressure, temp
+        try:
+            pressure, temp = self.pressure_gauge.read()
+            return pressure, temp
+        except OSError:
+            # sometimes we just lose a connection, forget it for now
+            self.pressure_gauge = None
+            logger.warning("lost connection to pressure gauge")
+            pressure, temp = np.nan, np.nan
+            return pressure, temp
 
     def get_location(self):
-        self._update()
-        coords = self.data['lat'], self.data['lon']
+        self._update_gps()
+        coords = self.gps_data['lat'], self.gps_data['lon']
         return coords
 
     def get_COG(self):
-        self._update()
-        return self.data['heading']
+        self._update_gps()
+        return self.gps_data['heading']
 
     def get_time(self):
-        self._update()
-        return self.data['time']
+        self._update_gps()
+        return self.gps_data['time']
 
     def get_data(self):
-        '''Try to read new data from GPS, and then pull out some useful info
+        '''Get the GPS, compass, and pressure data in a dict.
 
-        All of the available attributes are at http://www.catb.org/gpsd/gpsd_json.html
+        All available GPS attributes at http://www.catb.org/gpsd/gpsd_json.html
         '''
-        self._update()
+        self._update_gps()
         data = {}
-        data['lat']        = self.data['lat']
-        data['lon']        = self.data['lon']
-        data['datetime']   = self.data['time'] #Time/date stamp in ISO8601 format, UTC.
-        data['COG']        = self.data['track']
-        data['speed']      = self.data['speed']
-        if self.compass:
-            data['heading']    = self.get_heading()
-        else:
-            data['heading']    = np.nan
-        try:
-            pressure, temp = self.pressure_gauge.read()
-        except OSError:
-            # sometimes we just lose a connection, forget it for now
-            pressure, temp = np.nan, np.nan
-        data['pressure']   = pressure
-        data['temp']       = temp
-        self.has_new_data = False
+        data['lat']        = self.gps_data['lat']
+        data['lon']        = self.gps_data['lon']
+        data['datetime']   = self.gps_data['time'] #in ISO8601 format, UTC.
+        data['COG']        = self.gps_data['track'] # Course Over Ground
+        data['speed']      = self.gps_data['speed']
+        data['heading']    = self.get_heading()
+        data['pressure'], data['temp'] = self.get_pressure_and_temp()
+
         return data
 
-    def _update(self):
+    def _update_gps(self):
         for new_data in self.gps_socket:
             if new_data:
                 self.data_stream.unpack(new_data)
-                self.data = {}
+                self.gps_data = {}
                 for (key, value) in self.data_stream.TPV.items():
                     if value == 'n/a':
                         value = np.nan
-                    self.data[key] = value
-                self.has_new_data = True
+                    self.gps_data[key] = value
             return
 
 if __name__ == '__main__':
@@ -135,22 +172,3 @@ if __name__ == '__main__':
 ##        time.sleep(1)
     print("rotate boat compass in all directions for 15 seconds...")
     boat.calibrate_compass()
-
-
-
-
-
-
-
-
-'''
-Every 10 seconds, request data from the skiff.
-Save this data into a rotating buffer so we always have the last 4 hours
-Look through this and see if a Set occured by looking for the notable points:
-- the let go
-- full extension of net
-- starting to close up
-- closed up
-- skiff hooked back up
-If one did, save this as a Set
-'''
