@@ -11,13 +11,12 @@ LowPowerLab/RFM69
 
 additionally, the GPS library requires
 github.com/adafruit/Adafruit_Sensor
-and the RFM69 library requires
-github.com/LowPowerLab/SPIFlash
 */
-
+#include <avr/wdt.h> //watchdog timer
 #define SERIAL_BAUD   115200
 
 #define NUM_BYTES_SENT 16
+float NaN = sqrt(-1);
 
 typedef struct {
   float         x;
@@ -31,15 +30,24 @@ typedef struct {
   bool hasFix;
   float latitude;
   float longitude;
-  float COG;
+  float COG; //Course Over Ground, ie direction of travel
+  // Not to be confused with heading, the direction the skiff is pointed.
   float speed;
   vec3_t acceleration, magnetic;
 } reading_t;
 
-void setup(){
-  Serial.begin(SERIAL_BAUD);
-  Serial.println("starting...");
+reading_t reading;
+byte packed_bytes[NUM_BYTES_SENT];
 
+void setup(){
+//  Enable the watchdog timer to timeout after 8 sec.
+//  If we don't get a call to wdt_reset() every 8 sec, reboot the arduino.
+//  This is a savage way with the pesky freezeups I can't track down
+  wdt_enable(WDTO_8S);
+  Serial.begin(SERIAL_BAUD);
+  Serial.println("Starting...");
+  initReading(&reading);
+  
   if (initMagAccSensor()){
     Serial.println("Successfully loaded magnetometer/accelerometer.");
   }
@@ -60,14 +68,22 @@ void setup(){
   else{
     Serial.println("Failed to initialize radio. Check wiring?");
   }
+  Serial.println("Starting loop...");
+  Serial.flush();
 }
 
 void loop(){
-  delay(10);
-//  if (!newGPSreading()) return;
+  delay(100);
+  wdt_reset(); //reset the watchdog timer
 
-  reading_t reading;
+  Serial.println("filling!");
   fillReadingWithGPS(&reading);
+  Serial.print(reading.hour);
+  Serial.print(":");
+  Serial.print(reading.minute);
+  Serial.print(":");
+  Serial.println(reading.seconds);
+  
 //  fillReadingWithMagAcc(&reading);
 //  printReading(&reading);
 //  float x = reading.acceleration.x;
@@ -75,45 +91,53 @@ void loop(){
 //  float z = reading.acceleration.z;
 //  Serial.println(pitch(x,y,z));
 //  Serial.println(roll(x,y,z));
-  byte buf[NUM_BYTES_SENT];
+
   Serial.println("packing!");
-  reading2bytes(buf, &reading);
+  reading2bytes(packed_bytes, &reading);
   Serial.println("sending!");
-  radioSend(buf, NUM_BYTES_SENT);
-//  echoRadio();
+  radioSend(packed_bytes, NUM_BYTES_SENT);
 }
 
-float pitch(float accX, float accY, float accZ){
-  return atan2(-accX, sqrt(accY*accY + accZ*accZ)) * 180/M_PI;
-}
-
-float roll(float accX, float accY, float accZ){
-//  miu correction from https://stackoverflow.com/a/30195572/5156887
-  int sign  = accZ>0 ? 1 : -1 ;
-  float miu = 0.001;
-  float roll_rad  = atan2( accY,   sign* sqrt(accZ*accZ+ miu*accX*accX));
-  return roll_rad * 180/M_PI;
-}
+//float pitch(float accX, float accY, float accZ){
+//  return atan2(-accX, sqrt(accY*accY + accZ*accZ)) * 180/M_PI;
+//}
+//
+//float roll(float accX, float accY, float accZ){
+////  miu correction from https://stackoverflow.com/a/30195572/5156887
+//  int sign  = accZ>0 ? 1 : -1 ;
+//  float miu = 0.001;
+//  float roll_rad  = atan2( accY,   sign* sqrt(accZ*accZ+ miu*accX*accX));
+//  return roll_rad * 180/M_PI;
+//}
 
 void reading2bytes(byte result[NUM_BYTES_SENT], reading_t* reading){
+  /*  Populate an array of bytes with the values stored in a reading.
+   *  This array of bytes will then be sent over the radio and unpacked 
+   *  by the Raspberry Pi.
+   */
+
+//  bytes 0-3 contain the latitude
   byte pos = 0;
   byte* b = (byte *) &(reading->latitude);
   for (int i=0; i<4; i++){
     result[pos+i] = b[i];
   }
-  
+
+//  bytes 4-7 contain the longitude
   pos = pos + 4;
   b = (byte *) &(reading->longitude);;
   for (int i=0; i<4; i++){
     result[pos+i] = b[i];
   }
-  
+
+//  bytes 8-11 contain the Course Over Ground
   pos = pos + 4;
   b = (byte *) &(reading->COG);;
   for (int i=0; i<4; i++){
     result[pos+i] = b[i];
   }
 
+//  bytes 12-15 contain the speed
   pos = pos + 4;
   b = (byte *) &(reading->speed);;
   for (int i=0; i<4; i++){
@@ -122,6 +146,7 @@ void reading2bytes(byte result[NUM_BYTES_SENT], reading_t* reading){
 }
 
 void formatReading(String* result, reading_t* reading){
+  /* Turn a reading into a json string. Not currently used.*/
   *result = "{";
 
   *result += "\"hasGPS\":";
@@ -129,7 +154,6 @@ void formatReading(String* result, reading_t* reading){
 
   if (reading->hasGPS){
     *result += ", \"date\":\"";
-  //  Serial.println(result);
     *result += String(reading->month);
     *result += "/";
     *result += String(reading->day);
@@ -183,11 +207,28 @@ void printReading(reading_t *reading){
   Serial.println(resultString);
 }
 
-void Blink(char PIN, char DELAY_MS)
-{
-  pinMode(PIN, OUTPUT);
-  digitalWrite(PIN,HIGH);
-  delay(DELAY_MS/2);
-  digitalWrite(PIN,LOW);
-  delay(DELAY_MS/2);
+void initReading(reading_t *reading){
+  reading->hasGPS    = false;
+  reading->hasMagAcc = false;
+  reading->hasFix    = false;
+  reading->hour      = 255;
+  reading->minute    = 255;
+  reading->seconds   = 255;
+  reading->year      = 255;
+  reading->month     = 255;
+  reading->day       = 255;
+  
+  reading->latitude  = NaN;
+  reading->longitude = NaN;
+  reading->COG       = NaN;
+  reading->speed     = NaN;
+  
+  reading->acceleration.x = NaN;
+  reading->acceleration.y = NaN;
+  reading->acceleration.z = NaN;
+  
+  reading->magnetic.x = NaN;
+  reading->magnetic.y = NaN;
+  reading->magnetic.z = NaN;
 }
+
