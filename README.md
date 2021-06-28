@@ -1,6 +1,10 @@
+**This project is archived.**
+
+I haven't worked on it in 3 years, it still is in the messy experimentation phase, and I don't think it's likely I'll keep working on it. Hopefully it can be educational for someone ???.
+
 # SmartSeiner
 
-https://github.com/NickCrews/SmartBoat
+https://github.com/NickCrews/SmartSeiner
 
 How do millennials try to increase the catch on an Alaskan commercial salmon fishing boat? By making the process **DATA DRIVEN!!!!**
 
