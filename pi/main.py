@@ -1,7 +1,7 @@
 #main.py
 import logging
 LOGFILE = "/home/pi/Documents/SmartSeiner/pi/logfile.txt"
-LOG_FMT = "%(asctime)s:%(levelname)s:%(name)s:%(message)s"
+LOG_FMT = "%(asctime)s : %(levelname)s : %(name)s : %(message)s"
 logging.basicConfig(filename = LOGFILE,
                     level = "INFO",
                     format=LOG_FMT)
@@ -93,6 +93,7 @@ def calibrate_compass():
     # np.savetxt("corrected.txt", corrected)
 
 if __name__ == '__main__':
+    logger.info("="*80)
     logger.info("BEGINNING MAIN")
     # print(compass.Compass._default_params())
     main()

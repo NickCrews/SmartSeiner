@@ -22,6 +22,31 @@ class DataLogger(object):
         self.log_interval = log_interval
         self.filename = None
 
+        self.has_boat_pressure_gauge = self.boat.pressure_gauge is not None
+        if self.has_boat_pressure_gauge:
+            logger.info("Successfully loaded boat pressure gauge")
+        else:
+            logger.warning("FAILED to load boat pressure gauge")
+
+        self.has_boat_compass = self.boat.compass is not None
+        if self.has_boat_compass:
+            logger.info("Successfully loaded boat compass")
+        else:
+            logger.warning("FAILED to load boat compass")
+
+        self.has_boat_gps = self.boat.has_gps()
+        if self.has_boat_gps:
+            logger.info("Successfully loaded boat gps")
+        else:
+            logger.critical("FAILED to load boat gps")
+
+        self.has_boat_gps_fix = self.boat.has_gps_fix()
+        if self.has_boat_gps_fix:
+            logger.info("Successfully got fix on boat gps")
+        else:
+            logger.critical("FAILED to get fix on boat gps")
+        print("here!")
+
     def make_log_file(self, data):
         day_string = str(data['datetime']).split(" ")[0]
         filename = '/home/pi/Documents/SmartSeiner/pi/data/' + day_string + '.csv'
@@ -39,8 +64,36 @@ class DataLogger(object):
             with open(self.filename, 'w') as fp:
                 fp.write(header)
 
+    def update_sensor_status(self):
+        now_boat_has_compass = self.boat.compass is not None
+        if now_boat_has_compass and not self.has_boat_compass:
+            logger.warning("Re-established contact with boat compass")
+        if self.has_boat_compass and not now_boat_has_compass :
+            logger.warning("LOST contact with boat compass!")
+        self.has_boat_compass = now_boat_has_compass
+
+        now_boat_has_pressure_gauge = self.boat.pressure_gauge is not None
+        if now_boat_has_pressure_gauge and not self.has_boat_pressure_gauge:
+            logger.warning("Re-established contact with boat pressure gauge")
+        if self.has_boat_pressure_gauge and not now_boat_has_pressure_gauge:
+            logger.warning("LOST contact with boat pressure gauge!")
+        self.has_boat_pressure_gauge = now_boat_has_pressure_gauge
+
+        now_boat_has_gps = self.boat.has_gps()
+        if now_boat_has_gps and not self.has_boat_gps:
+            logger.critical("Re-established contact with boat GPS")
+        if self.has_boat_gps and not now_boat_has_gps:
+            logger.critical("LOST contact with boat GPS!")
+        self.has_boat_gps = now_boat_has_gps
+
+        now_boat_has_gps_fix = self.boat.has_gps_fix()
+        if now_boat_has_gps_fix and not self.has_boat_gps_fix:
+            logger.critical("boat GPS got a fix!")
+        if self.has_boat_gps_fix and not now_boat_has_gps_fix:
+            logger.critical("boat GPS does not have a fix!")
+        self.has_boat_gps_fix = now_boat_has_gps_fix
+
     def begin(self):
-        logger.info("="*80)
         logger.info("BEGAN LOGGING!!")
         last_sample = time.time()
         last_log  = time.time()
@@ -48,6 +101,8 @@ class DataLogger(object):
         while True:
             current_time = time.time()
             if current_time - last_sample > self.sample_interval:
+                self.update_sensor_status()
+
                 boat_data  = self.boat.get_data()
                 skiff_data = self.skiff.get_data()
                 merged_data = self.merge_boat_and_skiff_data(boat_data, skiff_data)

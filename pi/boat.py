@@ -7,9 +7,10 @@ dependencies:
 github.com/jkittley/RFM69
 '''
 
-import logging
-logger = logging.getLogger(__name__)
+# import logging
+# logger = logging.getLogger(__name__)
 
+import time
 import numpy as np
 
 from gps3 import gps3 #https://pypi.org/project/gps3/
@@ -25,9 +26,10 @@ class Boat(object):
 
     DEFAULT_CALIBRATION_FILE_PATH = "/home/pi/Documents/SmartSeiner/pi/calibrations/boat.txt"
 
-    def __init__(self, compass_file=None):
+    def __init__(self, compass_file=None, gps_timeout=5):
 
         self.compass_file = compass_file
+        self.gps_timeout = gps_timeout
 
         #assumes gpsd daemon has already been started
         self.gps_socket = gps3.GPSDSocket()
@@ -42,12 +44,12 @@ class Boat(object):
 
         self._init_pressure_gauge()
         self._init_compass()
+        self.last_gps_read_time = time.time()
 
     def _init_pressure_gauge(self):
         if not hasattr(self, 'pressure_gauge') or self.pressure_gauge is None:
             try:
                 self.pressure_gauge = PressureGauge()
-                logger.info("loaded pressure gauge")
             except OSError:
                 # couldnt talk to LSM303
                 self.pressure_gauge = None
@@ -56,10 +58,18 @@ class Boat(object):
         if not hasattr(self, 'compass') or self.compass is None:
             try:
                 self.compass = compass.BoatCompass(self.compass_file)
-                logger.info("loaded compass")
             except OSError:
                 # couldnt talk to LSM303
                 self.compass = None
+
+    def has_gps(self):
+        self._update_gps()
+        time_since_last_gps = time.time() - self.last_gps_read_time
+        return time_since_last_gps < self.gps_timeout
+
+    def has_gps_fix(self):
+        self._update_gps()
+        return not np.isnan(self.gps_data['lat'])
 
     def get_heading(self):
         self._init_compass()
@@ -70,7 +80,6 @@ class Boat(object):
         except OSError:
             # lost connection to compass
             self.compass = None
-            logger.warning("lost connection to compass")
             return np.nan
 
     def get_pressure_and_temp(self):
@@ -85,7 +94,6 @@ class Boat(object):
         except OSError:
             # sometimes we just lose a connection, forget it for now
             self.pressure_gauge = None
-            logger.warning("lost connection to pressure gauge")
             pressure, temp = np.nan, np.nan
             return pressure, temp
 
@@ -122,6 +130,7 @@ class Boat(object):
     def _update_gps(self):
         for new_data in self.gps_socket:
             if new_data:
+                self.last_gps_read_time = time.time()
                 self.data_stream.unpack(new_data)
                 self.gps_data = {}
                 for (key, value) in self.data_stream.TPV.items():

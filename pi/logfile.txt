@@ -1,0 +1,304 @@
+2018-08-11 16:56:51,726:INFO:__main__:BEGINNING MAIN
+2018-08-11 16:56:53,339:INFO:boat:loaded compass
+2018-08-11 16:56:53,342:INFO:datalogger:================================================================================
+2018-08-11 16:56:53,343:INFO:datalogger:BEGAN LOGGING!!
+2018-08-11 16:57:57,246:INFO:__main__:BEGINNING MAIN
+2018-08-11 16:57:58,864:INFO:boat:loaded compass
+2018-08-11 16:57:58,867:INFO:datalogger:================================================================================
+2018-08-11 16:57:58,869:INFO:datalogger:BEGAN LOGGING!!
+2018-08-11 16:57:59,501:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 16:59:28,591:INFO:__main__:BEGINNING MAIN
+2018-08-11 16:59:30,207:INFO:boat:loaded compass
+2018-08-11 16:59:30,210:INFO:datalogger:================================================================================
+2018-08-11 16:59:30,211:INFO:datalogger:BEGAN LOGGING!!
+2018-08-11 16:59:30,843:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 16:59:40,880:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:00:39,825:INFO:__main__:BEGINNING MAIN
+2018-08-11 17:00:41,445:INFO:boat:loaded compass
+2018-08-11 17:00:41,447:INFO:datalogger:================================================================================
+2018-08-11 17:00:41,447:INFO:datalogger:BEGAN LOGGING!!
+2018-08-11 17:00:42,075:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 17:00:52,114:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:11:57,350:INFO:__main__:BEGINNING MAIN
+2018-08-11 17:11:58,962:INFO:boat:loaded compass
+2018-08-11 17:11:59,569:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 17:12:09,597:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:12:57,436:INFO:__main__:BEGINNING MAIN
+2018-08-11 17:12:59,051:INFO:boat:loaded compass
+2018-08-11 17:12:59,054:WARNING:datalogger:FAILED to load skiff pressure gauge
+2018-08-11 17:12:59,055:INFO:datalogger:Successfully loaded boat compass
+2018-08-11 17:12:59,056:INFO:datalogger:================================================================================
+2018-08-11 17:12:59,057:INFO:datalogger:BEGAN LOGGING!!
+2018-08-11 17:12:59,688:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 17:13:09,714:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:13:32,584:INFO:__main__:BEGINNING MAIN
+2018-08-11 17:13:34,184:INFO:boat:loaded compass
+2018-08-11 17:13:34,185:WARNING:datalogger:FAILED to load skiff pressure gauge
+2018-08-11 17:13:34,186:INFO:datalogger:Successfully loaded boat compass
+2018-08-11 17:13:34,186:INFO:datalogger:================================================================================
+2018-08-11 17:13:34,187:INFO:datalogger:BEGAN LOGGING!!
+2018-08-11 17:13:34,819:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 17:13:44,855:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:14:17,259:INFO:__main__:================================================================================
+2018-08-11 17:14:17,259:INFO:__main__:BEGINNING MAIN
+2018-08-11 17:14:18,855:INFO:boat:loaded compass
+2018-08-11 17:14:18,857:WARNING:datalogger:FAILED to load skiff pressure gauge
+2018-08-11 17:14:18,857:INFO:datalogger:Successfully loaded boat compass
+2018-08-11 17:14:18,858:INFO:datalogger:BEGAN LOGGING!!
+2018-08-11 17:14:19,490:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 17:14:29,523:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:24:10,694:INFO:__main__:================================================================================
+2018-08-11 17:24:10,695:INFO:__main__:BEGINNING MAIN
+2018-08-11 17:24:12,326:INFO:boat:loaded compass
+2018-08-11 17:24:12,329:WARNING:datalogger:FAILED to load skiff pressure gauge
+2018-08-11 17:24:12,335:INFO:datalogger:Successfully loaded boat compass
+2018-08-11 17:24:12,335:INFO:datalogger:Trying to establish connection to boat GPS...
+2018-08-11 17:24:12,336:INFO:datalogger:BEGAN LOGGING!!
+2018-08-11 17:24:12,963:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 17:24:22,998:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:24:39,586:INFO:__main__:================================================================================
+2018-08-11 17:24:39,587:INFO:__main__:BEGINNING MAIN
+2018-08-11 17:24:41,209:INFO:boat:loaded compass
+2018-08-11 17:24:41,211:WARNING:datalogger:FAILED to load boat pressure gauge
+2018-08-11 17:24:41,211:INFO:datalogger:Successfully loaded boat compass
+2018-08-11 17:24:41,212:INFO:datalogger:Trying to establish connection to boat GPS...
+2018-08-11 17:24:41,212:INFO:datalogger:BEGAN LOGGING!!
+2018-08-11 17:24:41,844:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 17:24:51,863:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:28:38,027:INFO:__main__:================================================================================
+2018-08-11 17:28:38,028:INFO:__main__:BEGINNING MAIN
+2018-08-11 17:28:39,643:INFO:boat:loaded compass
+2018-08-11 17:28:39,646:WARNING:datalogger:FAILED to load boat pressure gauge
+2018-08-11 17:28:39,647:INFO:datalogger:Successfully loaded boat compass
+2018-08-11 17:28:39,648:INFO:datalogger:BEGAN LOGGING!!
+2018-08-11 17:28:40,279:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 17:28:50,312:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:29:40,141:INFO:__main__:================================================================================
+2018-08-11 17:29:40,141:INFO:__main__:BEGINNING MAIN
+2018-08-11 17:29:41,752:INFO:boat:loaded compass
+2018-08-11 17:29:41,755:WARNING:datalogger:FAILED to load boat pressure gauge
+2018-08-11 17:29:41,756:INFO:datalogger:Successfully loaded boat compass
+2018-08-11 17:29:42,388:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 17:29:52,394:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:31:59,700:INFO:__main__:================================================================================
+2018-08-11 17:31:59,701:INFO:__main__:BEGINNING MAIN
+2018-08-11 17:32:01,302:INFO:boat:loaded compass
+2018-08-11 17:32:01,303:WARNING:datalogger:FAILED to load boat pressure gauge
+2018-08-11 17:32:01,304:INFO:datalogger:Successfully loaded boat compass
+2018-08-11 17:32:01,937:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 17:32:11,944:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:34:15,409:INFO:__main__:================================================================================
+2018-08-11 17:34:15,412:INFO:__main__:BEGINNING MAIN
+2018-08-11 17:34:16,982:INFO:boat:loaded compass
+2018-08-11 17:34:16,984:WARNING:datalogger:FAILED to load boat pressure gauge
+2018-08-11 17:34:16,985:INFO:datalogger:Successfully loaded boat compass
+2018-08-11 17:34:17,618:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 17:34:27,659:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:35:36,779:INFO:__main__:================================================================================
+2018-08-11 17:35:36,780:INFO:__main__:BEGINNING MAIN
+2018-08-11 17:35:38,394:INFO:boat:loaded compass
+2018-08-11 17:35:39,031:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 17:35:49,039:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:37:03,370:INFO:__main__:================================================================================
+2018-08-11 17:37:03,371:INFO:__main__:BEGINNING MAIN
+2018-08-11 17:37:04,987:INFO:boat:loaded compass
+2018-08-11 17:37:04,989:WARNING:datalogger:FAILED to load boat pressure gauge
+2018-08-11 17:37:04,997:INFO:datalogger:Successfully loaded boat compass
+2018-08-11 17:37:05,623:INFO:skiff:Trying to initiate connection to skiff...
+2018-08-11 17:37:15,648:WARNING:skiff:Lost connection to skiff!
+2018-08-11 17:43:56,504 : INFO : __main__ : ================================================================================
+2018-08-11 17:43:56,504 : INFO : __main__ : BEGINNING MAIN
+2018-08-11 17:43:58,117 : INFO : boat : loaded compass
+2018-08-11 17:43:58,120 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-11 17:43:58,121 : INFO : datalogger : Successfully loaded boat compass
+2018-08-11 17:43:58,770 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-11 17:44:08,777 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 17:44:52,065 : INFO : __main__ : ================================================================================
+2018-08-11 17:44:52,066 : INFO : __main__ : BEGINNING MAIN
+2018-08-11 17:44:53,677 : INFO : boat : loaded compass
+2018-08-11 17:44:53,679 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-11 17:44:53,680 : INFO : datalogger : Successfully loaded boat compass
+2018-08-11 17:44:54,313 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-11 17:45:04,317 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 17:46:24,843 : INFO : __main__ : ================================================================================
+2018-08-11 17:46:24,844 : INFO : __main__ : BEGINNING MAIN
+2018-08-11 17:46:26,461 : INFO : boat : loaded compass
+2018-08-11 17:46:26,464 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-11 17:46:26,466 : INFO : datalogger : Successfully loaded boat compass
+2018-08-11 17:46:27,098 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-11 17:47:41,289 : INFO : __main__ : ================================================================================
+2018-08-11 17:47:41,290 : INFO : __main__ : BEGINNING MAIN
+2018-08-11 17:47:42,909 : INFO : boat : loaded compass
+2018-08-11 17:47:42,911 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-11 17:47:42,912 : INFO : datalogger : Successfully loaded boat compass
+2018-08-11 17:47:43,559 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-11 17:47:55,490 : INFO : __main__ : ================================================================================
+2018-08-11 17:47:55,490 : INFO : __main__ : BEGINNING MAIN
+2018-08-11 17:47:57,115 : INFO : boat : loaded compass
+2018-08-11 17:47:57,117 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-11 17:47:57,118 : INFO : datalogger : Successfully loaded boat compass
+2018-08-11 17:47:57,767 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-11 17:48:07,800 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 17:49:56,286 : INFO : __main__ : ================================================================================
+2018-08-11 17:49:56,286 : INFO : __main__ : BEGINNING MAIN
+2018-08-11 17:49:57,897 : INFO : boat : loaded compass
+2018-08-11 17:49:57,899 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-11 17:49:57,900 : INFO : datalogger : Successfully loaded boat compass
+2018-08-11 17:49:57,903 : INFO : datalogger : Successfully loaded boat gps
+2018-08-11 17:49:57,904 : CRITICAL : datalogger : FAILED to get fix on boat gps
+2018-08-11 17:49:57,904 : INFO : datalogger : BEGAN LOGGING!!
+2018-08-11 17:49:58,533 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-11 17:50:08,563 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 17:50:28,002 : INFO : __main__ : ================================================================================
+2018-08-11 17:50:28,002 : INFO : __main__ : BEGINNING MAIN
+2018-08-11 17:50:29,613 : INFO : boat : loaded compass
+2018-08-11 17:50:29,615 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-11 17:50:29,616 : INFO : datalogger : Successfully loaded boat compass
+2018-08-11 17:50:29,617 : INFO : datalogger : Successfully loaded boat gps
+2018-08-11 17:50:29,617 : CRITICAL : datalogger : FAILED to get fix on boat gps
+2018-08-11 17:50:29,618 : INFO : datalogger : BEGAN LOGGING!!
+2018-08-11 17:50:30,249 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-11 17:50:40,282 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 17:51:52,236 : INFO : __main__ : ================================================================================
+2018-08-11 17:51:52,237 : INFO : __main__ : BEGINNING MAIN
+2018-08-11 17:51:53,856 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-11 17:51:53,857 : INFO : datalogger : Successfully loaded boat compass
+2018-08-11 17:51:53,859 : INFO : dat2018-08-11 17:17:07,845 : INFO : __main__ : ================================================================================
+2018-08-11 17:17:07,846 : INFO : __main__ : BEGINNING MAIN
+2018-08-11 17:17:09,448 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-11 17:17:09,449 : INFO : datalogger : Successfully loaded boat compass
+2018-08-11 17:17:09,450 : INFO : datalogger : Successfully loaded boat gps
+2018-08-11 17:17:09,450 : CRITICAL : datalogger : FAILED to get fix on boat gps
+2018-08-11 17:17:09,451 : INFO : datalogger : BEGAN LOGGING!!
+2018-08-11 17:17:10,105 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-11 17:17:20,142 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 19:17:08,126 : INFO : __main__ : ================================================================================
+2018-08-11 19:17:08,128 : INFO : __main__ : BEGINNING MAIN
+2018-08-11 19:17:09,754 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-11 19:17:09,755 : INFO : datalogger : Successfully loaded boat compass
+2018-08-11 19:17:09,756 : INFO : datalogger : Successfully loaded boat gps
+2018-08-11 19:17:09,756 : CRITICAL : datalogger : FAILED to get fix on boat gps
+2018-08-11 19:17:09,757 : INFO : datalogger : BEGAN LOGGING!!
+2018-08-11 19:17:10,389 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-11 19:17:15,635 : CRITICAL : datalogger : LOST contact with boat GPS!
+2018-08-11 19:17:20,431 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 19:17:20,466 : CRITICAL : datalogger : Re-established contact with boat GPS
+2018-08-11 19:17:08,932 : INFO : __main__ : ================================================================================
+2018-08-11 19:17:08,937 : INFO : __main__ : BEGINNING MAIN
+2018-08-11 19:17:10,549 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-11 19:17:10,550 : INFO : datalogger : Successfully loaded boat compass
+2018-08-11 19:17:10,551 : INFO : datalogger : Successfully loaded boat gps
+2018-08-11 19:17:10,551 : CRITICAL : datalogger : FAILED to get fix on boat gps
+2018-08-11 19:17:10,552 : INFO : datalogger : BEGAN LOGGING!!
+2018-08-11 19:17:11,183 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-11 19:17:21,220 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 19:18:33,840 : CRITICAL : datalogger : boat GPS got a fix!
+2018-08-11 21:14:44,373 : CRITICAL : datalogger : LOST contact with boat GPS!
+2018-08-11 21:17:38,388 : CRITICAL : datalogger : Re-established contact with boat GPS
+2018-08-11 21:17:08,854 : INFO : __main__ : ================================================================================
+2018-08-11 21:17:08,855 : INFO : __main__ : BEGINNING MAIN
+2018-08-11 21:17:10,502 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-11 21:17:10,502 : INFO : datalogger : Successfully loaded boat compass
+2018-08-11 21:17:10,503 : INFO : datalogger : Successfully loaded boat gps
+2018-08-11 21:17:10,504 : CRITICAL : datalogger : FAILED to get fix on boat gps
+2018-08-11 21:17:10,504 : INFO : datalogger : BEGAN LOGGING!!
+2018-08-11 21:17:11,135 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-11 21:17:16,380 : CRITICAL : datalogger : LOST contact with boat GPS!
+2018-08-11 21:17:21,165 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 22:16:09,366 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-11 23:17:07,570 : INFO : __main__ : ================================================================================
+2018-08-11 23:17:07,571 : INFO : __main__ : BEGINNING MAIN
+2018-08-11 23:17:09,211 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-11 23:17:09,212 : INFO : datalogger : Successfully loaded boat compass
+2018-08-11 23:17:09,213 : INFO : datalogger : Successfully loaded boat gps
+2018-08-11 23:17:09,214 : CRITICAL : datalogger : FAILED to get fix on boat gps
+2018-08-11 23:17:09,214 : INFO : datalogger : BEGAN LOGGING!!
+2018-08-11 23:17:09,845 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-11 23:17:13,482 : CRITICAL : datalogger : boat GPS got a fix!
+2018-08-11 23:21:41,491 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 23:21:52,069 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-11 23:22:02,095 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 23:22:03,349 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-11 23:23:34,273 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 23:23:47,053 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-11 23:24:38,191 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 23:24:40,347 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-11 23:24:50,625 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 23:25:23,154 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-11 23:26:45,778 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 23:26:52,495 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-11 23:27:59,835 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 23:28:02,242 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-11 23:28:14,573 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 23:28:14,975 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-11 23:29:38,400 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 23:29:39,103 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-11 23:31:33,572 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 23:31:37,080 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-11 23:31:57,836 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 23:31:58,488 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-11 23:34:00,991 : WARNING : skiff : Lost connection to skiff!
+2018-08-11 23:34:03,448 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-12 00:20:52,945 : WARNING : skiff : Lost connection to skiff!
+2018-08-12 13:17:09,258 : INFO : __main__ : ================================================================================
+2018-08-12 13:17:09,260 : INFO : __main__ : BEGINNING MAIN
+2018-08-12 13:17:10,883 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-12 13:17:10,884 : INFO : datalogger : Successfully loaded boat compass
+2018-08-12 13:17:10,885 : INFO : datalogger : Successfully loaded boat gps
+2018-08-12 13:17:10,886 : CRITICAL : datalogger : FAILED to get fix on boat gps
+2018-08-12 13:17:10,886 : INFO : datalogger : BEGAN LOGGING!!
+2018-08-12 13:17:11,554 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-12 13:17:21,583 : WARNING : skiff : Lost connection to skiff!
+2018-08-12 13:18:39,045 : CRITICAL : datalogger : boat GPS got a fix!
+2018-08-12 19:07:06,796 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-12 18:17:08,886 : INFO : __main__ : ================================================================================
+2018-08-12 18:17:08,888 : INFO : __main__ : BEGINNING MAIN
+2018-08-12 18:17:10,562 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-12 18:17:10,563 : INFO : datalogger : Successfully loaded boat compass
+2018-08-12 18:17:10,564 : INFO : datalogger : Successfully loaded boat gps
+2018-08-12 18:17:10,565 : CRITICAL : datalogger : FAILED to get fix on boat gps
+2018-08-12 18:17:10,565 : INFO : datalogger : BEGAN LOGGING!!
+2018-08-12 18:17:11,196 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-12 18:17:13,220 : CRITICAL : datalogger : boat GPS got a fix!
+2018-08-14 18:09:13,367 : WARNING : skiff : Lost connection to skiff!
+2018-08-14 18:09:13,569 : WARNING : skiff : Got a radio connection to skiff!
+2018-08-14 18:17:07,814 : INFO : __main__ : ================================================================================
+2018-08-14 18:17:07,816 : INFO : __main__ : BEGINNING MAIN
+2018-08-14 18:17:09,461 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-14 18:17:09,462 : INFO : datalogger : Successfully loaded boat compass
+2018-08-14 18:17:09,463 : INFO : datalogger : Successfully loaded boat gps
+2018-08-14 18:17:09,464 : CRITICAL : datalogger : FAILED to get fix on boat gps
+2018-08-14 18:17:09,464 : INFO : datalogger : BEGAN LOGGING!!
+2018-08-14 18:17:10,095 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-14 18:17:12,158 : CRITICAL : datalogger : boat GPS got a fix!
+2018-08-14 20:03:32,460 : WARNING : skiff : Lost connection to skiff!
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       2018-08-14 21:17:07,669 : INFO : __main__ : ================================================================================
+2018-08-14 21:17:07,671 : INFO : __main__ : BEGINNING MAIN
+2018-08-14 21:17:09,287 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-14 21:17:09,287 : INFO : datalogger : Successfully loaded boat compass
+2018-08-14 21:17:09,288 : INFO : datalogger : Successfully loaded boat gps
+2018-08-14 21:17:09,289 : CRITICAL : datalogger : FAILED to get fix on boat gps
+2018-08-14 21:17:09,289 : INFO : datalogger : BEGAN LOGGING!!
+2018-08-14 21:17:09,920 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-14 21:17:18,420 : CRITICAL : datalogger : boat GPS got a fix!
+2018-08-14 21:17:19,951 : WARNING : skiff : Lost connection to skiff!
+2018-08-14 23:17:08,083 : INFO : __main__ : ================================================================================
+2018-08-14 23:17:08,085 : INFO : __main__ : BEGINNING MAIN
+2018-08-14 23:17:09,703 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-14 23:17:09,704 : INFO : datalogger : Successfully loaded boat compass
+2018-08-14 23:17:09,705 : INFO : datalogger : Successfully loaded boat gps
+2018-08-14 23:17:09,706 : CRITICAL : datalogger : FAILED to get fix on boat gps
+2018-08-14 23:17:09,706 : INFO : datalogger : BEGAN LOGGING!!
+2018-08-14 23:17:10,359 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-14 23:17:20,388 : WARNING : skiff : Lost connection to skiff!
+2018-08-14 23:17:33,366 : CRITICAL : datalogger : boat GPS got a fix!
+2018-08-15 13:48:08,070 : INFO : __main__ : ================================================================================
+2018-08-15 13:48:08,072 : INFO : __main__ : BEGINNING MAIN
+2018-08-15 13:48:09,724 : WARNING : datalogger : FAILED to load boat pressure gauge
+2018-08-15 13:48:09,725 : INFO : datalogger : Successfully loaded boat compass
+2018-08-15 13:48:09,727 : INFO : datalogger : Successfully loaded boat gps
+2018-08-15 13:48:09,728 : CRITICAL : datalogger : FAILED to get fix on boat gps
+2018-08-15 13:48:09,729 : INFO : datalogger : BEGAN LOGGING!!
+2018-08-15 13:48:10,359 : INFO : skiff : Trying to initiate connection to skiff...
+2018-08-15 13:48:14,001 : CRITICAL : datalogger : boat GPS got a fix!
+2018-08-15 13:48:20,400 : WARNING : skiff : Lost connection to skiff!

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <!-- <link type="text/css" rel="stylesheet" href="style.css"/> -->
+    <!-- <link type="text/css" href="style.css"/> -->
+    <style>
+
+    body {
+      font: 300 36px "Helvetica Neue";
+      /* height: 640px; */
+      height: auto;
+      margin: 0px 0px 0px 0px;
+      overflow: hidden;
+      position: relative;
+      /* width: 960px; */
+      width: auto;
+    }
+
+    a:link, a:visited {
+      color: #777;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #666;
+    }
+
+    blockquote {
+      margin: 0;
+    }
+
+    blockquote:before {
+      content: "“";
+      position: absolute;
+      left: -.4em;
+    }
+
+    blockquote:after {
+      content: "”";
+      position: absolute;
+    }
+
+    body > ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      font-size: 64px;
+    }
+
+    h1, h2, h3 {
+      font-weight: inherit;
+      margin: 40px 40px 40px 40px;
+    }
+
+    h2, h3 {
+      text-align: left;
+      font-size: inherit;
+      position: absolute;
+      top: 40;
+      left: 40;
+    }
+
+    h2 {
+      font-size: 24px;
+      position: absolute;
+      top: 40;
+      left: 40;
+    }
+
+    h3 {
+      bottom: -20px;
+      font-size: 18px;
+    }
+
+    .invert {
+      background: #1f1f1f;
+      color: #dcdccc;
+    }
+
+    .invert h2, .invert h3 {
+      color: #7f9f7f;
+    }
+
+    .string, .regexp {
+      color: #f39;
+    }
+
+    .keyword {
+      color: #00c;
+    }
+
+    .comment {
+      color: #777;
+      font-style: oblique;
+    }
+
+    .number {
+      color: #369;
+    }
+
+    .class, .special {
+      color: #1181B8;
+    }
+
+    body > svg {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+
+    #display {
+        cursor: move;
+    }
+
+    .background {
+      fill: #a4bac7;
+    }
+
+    .foreground {
+      fill: none;
+      stroke: #333;
+      stroke-width: 1.5px;
+    }
+
+    .graticule {
+      fill: none;
+      stroke: #fff;
+      stroke-width: .5px;
+    }
+
+    .graticule :nth-child(2n) {
+      stroke-dasharray: 2,2;
+    }
+
+    .land {
+      fill: #d7c7ad;
+      stroke: #766951;
+    }
+
+    .geojson {
+     fill: none;
+     stroke: red;
+     stroke-width: 5;
+    }
+
+    .alaska {
+        fill: #d7c7ad;
+        stroke: #a5967e;
+        stroke-width: .2;
+    }
+
+    .skiff_track {
+        fill: none;
+        stroke: red;
+        stroke-width: .5;
+        /* stroke-dasharray: 4,4; */
+    }
+
+    .boat_track {
+        fill: none;
+        stroke: blue;
+        stroke-width: .5;
+        /* stroke-dasharray: 4,4; */
+    }
+
+    .overview {
+        fill: none;
+        stroke: black;
+        stroke-width: .5;
+        /* stroke-dasharray: 4,4; */
+    }
+
+    .set_circle {
+        fill: steelblue;
+        fill-opacity: .8;
+        stroke: #fff;
+    }
+
+    .boundary {
+      fill: none;
+      stroke: #a5967e;
+    }
+
+    .set_text{
+        font-size: 4;
+        font-family: sans-serif;
+        color: steelblue;
+        text-anchor: right;
+        text
+    }
+
+    </style>
+</head>
+<body>
+
+<script src='lib/jquery-2.0.3.js'></script>
+
+<script src="lib/d3.v3.min.js"></script>
+<!-- <script src="d3.js"></script> -->
+<script src="lib/topojson.v0.min.js"></script>
+<!-- <script src="worldtopo.js"></script>
+<script src="usa_coastline_10m.js"></script> -->
+<!-- <script src="ak_coastline.js"></script> -->
+<!-- <script src="pws_coastline_10m.js"></script> -->
+<script src="data/pws_coastline_mix.js"></script>
+<script src="data/paths.js"></script>
+<script src="data/track.js"></script>
+<script src="data/sets.js"></script>
+
+<svg id="display"></svg>
+<h2 id="info_tab">
+    <span class="info_name">Select a set...</span> <br>
+    <span class="info_weight"> </span> <br>
+    <span class="info_holdtime"> </span>
+</h2>
+<script>
+
+var width = $(window).width(),
+    height = $(window).height();
+
+console.log(width);
+console.log(height);
+
+    // d3.select("body")
+    //     .attr("width", width)
+    //     .attr("height", height);
+
+
+var sc = Math.min(width,height) * 2
+
+// EPSG:3338
+var projection = d3.geo.conicEqualArea()
+    .scale(sc)
+    .rotate([154, 0])
+    .center([0, 62])
+    .parallels([55, 65])
+    .clipExtent([[-1, -1], [width + 1, height + 1]]);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+function zoomed() {
+  projection.translate(d3.event.translate).scale(d3.event.scale);
+  svg.selectAll("path").attr("d", path);
+  move_sets();
+  draw_set_circles();
+}
+
+function moused_over(obj){
+    // timestring = obj.name.substring(0, obj.name.length-3)
+    info_tab.select(".info_name").text(obj.datetime);
+    info_tab.select(".info_weight").text("Weight: " + obj.weight);
+    info_tab.select(".info_holdtime").text("Hold Time: " + obj.hold_time);
+
+    tracks.selectAll(".boat_track").data([obj.boat_track])
+        .enter()
+        .append("path")
+        .attr("class","boat_track")
+        .attr("d", path);
+    tracks.selectAll(".skiff_track").data([obj.skiff_track])
+      .enter()
+      .append("path")
+      .attr("class","skiff_track")
+      .attr("d", path);
+}
+
+function moused_out(x){
+    // console.log(x);
+    // console.log(info_tab);
+    info_tab.select(".info_name").text("Select a set...");
+    info_tab.select(".info_weight").text("");
+    info_tab.select(".info_holdtime").text("");
+    tracks.selectAll(".boat_track").remove()
+    tracks.selectAll(".skiff_track").remove()
+}
+
+var zoom = d3.behavior.zoom()
+    .translate(projection.translate())
+    .scale(projection.scale())
+    .scaleExtent([height, 6400 * height])
+    .on("zoom", zoomed);
+
+var graticule = d3.geo.graticule()
+    .step([1, 1]);
+
+var svg = d3.select("body").select("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .call(zoom);
+
+var info_tab = d3.select("body").select("h2");
+
+svg.append("path")
+    .datum(graticule.outline)
+    .attr("class", "background")
+    .attr("d", path);
+
+svg.append("path")
+    .datum(graticule)
+    .attr("class", "graticule")
+    .attr("d", path);
+
+var alaska = svg.append("g")
+  .attr("id", "alaska");
+
+alaska.selectAll(".alaska").data([pws_coastline_mix])
+  .enter()
+  .append("path")
+  .attr("class","alaska")
+  .attr("d", path);
+
+var overview = svg.append("g")
+    .attr("id", "overview");
+
+overview.selectAll(".overview").data([overview_track])
+    .enter()
+    .append("path")
+    .attr("class","overview")
+    .attr("d", path);
+
+// g.selectAll(".skiff_track").data([skiff_track])
+//         .enter()
+//         .append("path")
+//         .attr("class","skiff_track")
+//         .attr("d", path);
+
+var tracks = svg.append("g")
+    .attr("id", "tracks");
+
+// tracks.selectAll(".boat_track").data([boat_track])
+//       .enter()
+//       .append("path")
+//       .attr("class","boat_track")
+//       .attr("d", path);
+
+  // g.selectAll(".set_text")
+  //       .data(sets)
+  //       .enter().append("text")
+  //       .attr("class", "set_text")
+  //       .attr("x", 0)
+  //       .attr("y", 0)
+  //       .attr("text-anchor", "middle")
+  //       .attr("font-size", "10px")
+  //       .text(function(d) {return d.name});
+        // .text("foo");
+
+var set_locations = [];
+sets.forEach(function(set) {
+    set_locations.push(set.location);
+});
+
+var set_positions
+
+var circles = svg.append("g")
+    .attr("id", "circles");
+
+function move_sets(){
+    set_positions = []
+    set_locations.forEach(function(loc) {
+        // console.log(loc.coordinates);
+        lon = loc.coordinates[0];
+        lat = loc.coordinates[1];
+        set_positions.push(projection([+lon, +lat]));
+    });
+
+}
+function draw_set_circles(){
+    // console.log(set_positions);
+    circles.selectAll("circle")
+        .attr("cx", function(d, i) { return set_positions[i][0]; })
+        .attr("cy", function(d, i) { return set_positions[i][1]; });
+
+    // g.selectAll("text")
+    //     .attr("x", function(d, i) { return set_positions[i][0]; })
+    //     .attr("y", function(d, i) { return set_positions[i][1]; });
+}
+
+circles.selectAll(".set_circle")
+      .data(sets)
+    .enter().append("svg:circle")
+      .attr("class", "set_circle")
+      .attr("cx", 0)
+      .attr("cy", 0)
+      .attr("r", 5)
+      .attr("id", function(d, i){return d.name})
+      .on("mouseover", moused_over)
+      .on("mouseout", moused_out)
+      ;
+
+var set_positions;
+
+function move_sets(){
+    set_positions = []
+    set_locations.forEach(function(loc) {
+        // console.log(loc.coordinates);
+        lon = loc.coordinates[0];
+        lat = loc.coordinates[1];
+        set_positions.push(projection([+lon, +lat]));
+    });
+}
+
+function draw_set_circles(){
+    circles.selectAll("circle")
+        .attr("cx", function(d, i) { return set_positions[i][0]; })
+        .attr("cy", function(d, i) { return set_positions[i][1]; });
+}
+
+
+move_sets()
+draw_set_circles()
+
+
+</script>

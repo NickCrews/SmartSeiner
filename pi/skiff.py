@@ -76,16 +76,17 @@ class RadioPoller(Thread):
     '''A separate thread that constantly polls the RFM69 and places data in
     a queue, to be read by the owning MyRadio'''
 
-    def __init__(self, result_queue, sleep_time=.05):
+    def __init__(self, result_queue, sleep_time=.05, connection_timeout=10):
         Thread.__init__(self, name='rfm69_poller')
         self.q = result_queue
         self.sleep_time = sleep_time
+        self.connection_timeout = connection_timeout
 
     def run(self):
         # just to make the library shutup about using pins already in use...
         import RPi.GPIO as GPIO
         GPIO.setwarnings(False)
-        
+
         with Radio(FREQ_915MHZ,
                    THIS_NODE_ID,
                    NETWORK_ID,
@@ -105,13 +106,20 @@ class RadioPoller(Thread):
             # lowpowerlab.com/forum/rf-range-antennas-rfm69-library/rfm69hw-range-test!
             radio._writeReg(0x58, 0x2D)
 
+            last_receive_time = time.time()
+            is_connected = True
+            logger.info("Trying to initiate connection to skiff...")
             while True:
                 # print("RadioPoller is polling...")
                 for packet in radio.get_packets():
-                    # entry = (int(packet.RSSI), packet.received
-                    # print("RadioPoller received some data!")
-                    logger.debug("got a radio packet with rssi={}".format(packet.RSSI))
+                    if not is_connected:
+                        logger.warning("Got a radio connection to skiff!")
+                    is_connected = True
+                    logger.debug("Got a radio packet with rssi={}".format(packet.RSSI))
+                    last_receive_time = time.time()
                     self.q.put(packet.data[:])
                     # print (packet.RSSI, bytes2floats(packet.data))
-
+                if is_connected and (time.time() - last_receive_time > self.connection_timeout):
+                    is_connected = False
+                    logger.warning("Lost connection to skiff!")
                 time.sleep(self.sleep_time)
